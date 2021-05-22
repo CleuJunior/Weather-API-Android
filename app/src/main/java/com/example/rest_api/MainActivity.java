@@ -47,49 +47,23 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view)
             {
-                // Instantiate the RequestQueue.
-                RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
-                String url ="https://www.metaweather.com/api/location/search/?query=" + et_dataInput.getText().toString();
+                WeatherDataService weatherDataService = new WeatherDataService(MainActivity.this);
 
-                JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>(){
+                weatherDataService.getCityID(et_dataInput.getText().toString(), new WeatherDataService.VolleyResponseListenner(){
                     @Override
-                    public void onResponse(JSONArray response)
+                    public void onError(String message)
                     {
-                        String cityID = "";
-                        try {
-                            JSONObject cityInfo = response.getJSONObject(0);
-                            cityID = cityInfo.getString("woeid");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        Toast.makeText(MainActivity.this, "Cty ID: " + cityID, Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainActivity.this, "Something went Wrong", Toast.LENGTH_LONG).show();
                     }
-                }, new Response.ErrorListener() {
+
                     @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(MainActivity.this, "Something Wrong", Toast.LENGTH_LONG).show();
+                    public void onResponse(String cityID)
+                    {
+                        Toast.makeText(MainActivity.this, "Returned an ID of " + cityID, Toast.LENGTH_LONG).show();
                     }
                 });
 
-                queue.add(request);
-//                // Request a string response from the provided URL.
-//                StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-//                        new Response.Listener<String>() {
-//                            @Override
-//                            public void onResponse(String response) {
-//                                Toast.makeText(MainActivity.this, response, Toast.LENGTH_LONG).show();
-//                            }
-//                        }, new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        Toast.makeText(MainActivity.this, "Erro occured", Toast.LENGTH_LONG).show();
-//                    }
-//                });
 
-                // Add the request to the RequestQueue.
-
-                //Toast.makeText(MainActivity.this, "City by ID Clickado", Toast.LENGTH_LONG).show();
             }
         });
 
