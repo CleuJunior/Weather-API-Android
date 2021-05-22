@@ -41,14 +41,14 @@ public class MainActivity extends AppCompatActivity {
         et_dataInput = findViewById(R.id.et_dataInput);
         lv_weatherReport = findViewById(R.id.lv_weatherReports);
 
+        final WeatherDataService weatherDataService = new WeatherDataService(MainActivity.this);
+
         // click listenners for each button.
 
         btn_cityID.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view)
             {
-                WeatherDataService weatherDataService = new WeatherDataService(MainActivity.this);
-
                 weatherDataService.getCityID(et_dataInput.getText().toString(), new WeatherDataService.VolleyResponseListenner(){
                     @Override
                     public void onError(String message)
@@ -62,8 +62,6 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, "Returned an ID of " + cityID, Toast.LENGTH_LONG).show();
                     }
                 });
-
-
             }
         });
 
@@ -71,7 +69,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view)
             {
-                Toast.makeText(MainActivity.this, "Tempo por ID Clickado", Toast.LENGTH_LONG).show();
+                weatherDataService.getCityForecastByID("44418");
+
             }
         });
 
